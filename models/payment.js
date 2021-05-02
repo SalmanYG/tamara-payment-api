@@ -24,7 +24,7 @@ const PaymentSchema = new Schema({
     },
     due_date: {
         type: Date,
-        default: () => Date.now() + 10*60*1000
+        default: () => Date.now() + 31*24*60*60*1000
     },
     paid_date: Date,
     is_deleted: {
