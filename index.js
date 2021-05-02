@@ -9,6 +9,12 @@ import 'dotenv/config.js'
 const app = express()
 const PORT = 5000;
 
+mongoose.connect(
+    process.env.DB_URI,
+    { useNewUrlParser: true},
+    () => console.log('connected to DB')
+)
+
 app.use(express.json())
 app.use('/payments', paymentsRouter)
 app.use('/users', usersRouter)
@@ -17,10 +23,6 @@ app.get('/', (req, res) => {
     res.send('HELLO from Homepage')
 })
 
-mongoose.connect(
-    process.env.DB_URI,
-    { useNewUrlParser: true},
-    () => console.log('connected to DB')
-)
+
 
 app.listen(PORT)

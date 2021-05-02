@@ -15,7 +15,8 @@ const UserSchema = new Schema({
         dropDups: true
     },
     payments: [{
-        payment_id: String
+        type: Schema.Types.ObjectId,
+        ref: "Payments" //call the name of the needed model
     }],
     is_deleted: {
         type: Boolean,

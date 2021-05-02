@@ -3,8 +3,8 @@ const { Schema } = mongoose
 
 const PaymentSchema = new Schema({
     customer_id: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: "Users"
     },
     amount: {
         type: Number,
@@ -24,7 +24,7 @@ const PaymentSchema = new Schema({
     },
     due_date: {
         type: Date,
-        default: () => Date.now() + 7*24*60*60*1000
+        default: () => Date.now() + 10*60*1000
     },
     paid_date: Date,
     is_deleted: {

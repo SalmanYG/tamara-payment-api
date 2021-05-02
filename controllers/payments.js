@@ -1,8 +1,8 @@
 import User from '../models/user.js'
 import Payment from '../models/payment.js'
-import axios from 'axios'
+import setReminder from '../reminder/reminder.js'
 
-const STATUS = {
+export const STATUS = {
     PAID: "paid",
     UNPAID: "unpaid",
     OVERDUE: "overdue",
@@ -10,7 +10,12 @@ const STATUS = {
 }
 
 export const getPayments = async (req, res) => {
-    res.send(await Payment.find({ is_deleted: false }))
+    try {
+        res.send(await Payment.find({ is_deleted: false }).populate("customer_id").exec())
+    }
+    catch (error) {
+        res.send(`There has been an error: ${error}`)
+    }
 }
 
 export const addPayment = async (req, res) => {
@@ -24,14 +29,11 @@ export const addPayment = async (req, res) => {
             amount: amount,
             currency: currency
         })
-
-        await axios.patch(`localhost:5000/users/${customer_id}`, {
-            payment_id: payment.id
-        })
-        .then(response => console.log(response))
-        .catch(error => console.log(error))
-
         await payment.save()
+        user.payments.push(payment)
+        await user.save()
+
+        setReminder(user, payment)
         res.send(`Payment with the id ${payment.id} has been created`)
     }
     catch (error) {
@@ -56,9 +58,9 @@ export const editPayment = async (req, res) => {
         const { id } = req.params
         const { status } = req.body
         const payment = await Payment.findById(id)
-        if(status === STATUS.PAID || status === STATUS.CANCELLED) {
+        if(status === STATUS.PAID) {
             payment.status = status
-            if(status === STATUS.PAID) payment.paid_date = Date.now()
+            payment.paid_date = Date.now()
             await payment.save()
             res.send(`The status of the payment has been changed to ${status}`)
         }
@@ -75,6 +77,7 @@ export const deletePayment = async (req, res) => {
         const payment = await Payment.findById(id)
         payment.is_deleted = true
         payment.$isDeleted(true)
+        payment.status = STATUS.CANCELLED
         await payment.save()
         res.send(`Payment with the id ${id} has been deleted`)
     }
