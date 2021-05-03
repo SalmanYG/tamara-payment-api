@@ -4,7 +4,8 @@ const { Schema } = mongoose
 const PaymentSchema = new Schema({
     customer_id: {
         type: Schema.Types.ObjectId,
-        ref: "Users"
+        ref: "Users",
+        required: true
     },
     amount: {
         type: Number,

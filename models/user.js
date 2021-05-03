@@ -16,7 +16,7 @@ const UserSchema = new Schema({
     },
     payments: [{
         type: Schema.Types.ObjectId,
-        ref: "Payments" //call the name of the needed model
+        ref: "Payments"
     }],
     is_deleted: {
         type: Boolean,
