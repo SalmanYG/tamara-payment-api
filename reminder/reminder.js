@@ -1,9 +1,7 @@
 import schedlue from 'node-schedule'
 import nodemailer from 'nodemailer'
 import smtpTransport from 'nodemailer-smtp-transport'
-
 import { STATUS } from '../controllers/payments.js'
-
 import 'dotenv/config.js'
 
 const transporter = nodemailer.createTransport(smtpTransport({
@@ -17,7 +15,6 @@ const transporter = nodemailer.createTransport(smtpTransport({
 }))
 
 const setReminder = (user, payment) => {
-
     const message = {
         from: process.env.EMAIL_USER,
         to: user.email,
@@ -29,14 +26,13 @@ const setReminder = (user, payment) => {
         Regards,
         Tamara.`
     }
-
     schedlue.scheduleJob(payment.due_date, () => {
         if(payment.status === STATUS.UNPAID) {
             transporter.sendMail(message, () => {
                 payment.status = STATUS.OVERDUE
             })
+            console.log(`The payment with the id ${payment.id} is overdue.`)
         }
-        
     })
 }
 
