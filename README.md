@@ -53,7 +53,7 @@ There are 3 APIs in this project:
 * **Payments CRUD REST API**, which is responsible for creating and managing payments.
 * **Reminder API**, which is responsible for sending a reminder to the customer's email when their payment is overdue.
 
-|METHODS   |GET /   |POST /   |GET /:id   |PATCH /:id   |DELETE /:id   |
+|\   |GET /   |POST /   |GET /:id   |PATCH /:id   |DELETE /:id   |
 |---|---|---|---|---|---|
 |/users   |✅   |✅   |✅   |   |✅   |
 |/payments   |✅   |✅   |✅   |✅   |✅   |
